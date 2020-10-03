@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      	xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+    	xmlns:p="http://primefaces.org/ui">
+    	
+    	
+<h:head>
+	<title>TropSmart - Registro</title>
+</h:head>
+
+
+<h:body>
+<h:form>
+<p:tabMenu activeIndex="#{param.i}">
+    <p:menuitem value="Iniciar Sesion" url="http://localhost:8087/tropsmart/login.xhtml" icon="pi pi-star">
+        <f:param name="i" value="0" />
+    </p:menuitem>
+    <p:menuitem value="Registro" url="http://localhost:8087/tropsmart/registro.xhtml" icon="pi pi-search">
+        <f:param name="i" value="1" />
+    </p:menuitem>
+    <p:menuitem value="Volver" url="http://localhost:8087/tropsmart/clientes/login.xhtml" icon="pi pi-file">
+        <f:param name="i" value="2" />
+    </p:menuitem>
+</p:tabMenu>
+</h:form>
+
+<div style="margin: 50px"></div>
+<h:form id="registroForm">
+    <p:panel header="Registro" style="width: 750px;margin:auto">
+	<p:messages/>
+    <h:panelGrid columns="3">
+    
+      <p:outputLabel value="Nombre de usuario: " style="margin: 0px 25px"/>
+      <p:inputText id="usuario" value="#{clienteController.cliente.nombreUsuario}" required="true" label="Usuario">
+        <p:ajax event="keyup" update="userNameMsg"/>
+      </p:inputText>
+      <p:message id="userNameMsg" for="usuario"/>
+      
+      <p:outputLabel value="Clave: " style="margin:5px 25px"/>
+      <p:password id="clave" value="#{clienteController.cliente.clave}" feedback="true" required="true" label="Clave">
+        <f:validateLength minimum="6"/>
+        <p:ajax update="passwordMsg" event="keyup"/>
+      </p:password>
+      <p:message id="passwordMsg" for="clave"/>
+      
+      <p:outputLabel value="Nombres: " style="margin:5px 25px"/>
+      <p:inputText id="nombres" value="#{clienteController.cliente.nombres}" required="true" label="Nombres">
+      </p:inputText>
+      <p:message id="firstNameMsg" for="nombres"/>
+      
+      <p:outputLabel value="Apellidos: " style="margin:5px 25px"/>
+      <p:inputText id="apellidos" value="#{clienteController.cliente.apellidos}" required="true" label="Apellidos"/>
+      <p:message id="lastNameMsg" for="apellidos"/>
+      
+      <p:outputLabel value="Nro. Documento: " style="margin:5px 25px"/>
+      <p:inputNumber id="documento" value="#{clienteController.cliente.numeroDocumento}" required="true" label="Documento" maxValue="999999999999" thousandSeparator="" decimalPlaces="0"></p:inputNumber>
+      <p:message id="documentMsg" for="documento"/>
+      
+      <p:outputLabel for="distritos" value="Distrito: " style="margin:5px 25px"/>
+			<p:selectOneMenu id="distritos" value="#{clienteController.cliente.distritoId}">
+	            <f:selectItem itemLabel="Seleciona un Distrito" itemValue="0" />
+	            <f:selectItems value="#{clienteController.distritos}" var="distrito" 
+	            	itemLabel="#{distrito.nombre}" itemValue="#{distrito.id}" />
+	        </p:selectOneMenu>
+      
+      <div></div>
+      <p:outputLabel value="Celular: " style="margin:5px 25px"/>
+      <p:inputNumber id="celular" value="#{clienteController.cliente.celular}" required="true" label="Celular" maxValue="99999999999999999999" thousandSeparator="" decimalPlaces="0"></p:inputNumber>
+      <p:message id="celularMsg" for="celular"/>
+      
+      <p:outputLabel value="Email: " style="margin:5px 25px"/>
+      <p:inputText id="email" value="#{clienteController.cliente.correo}" required="true" label="Email"/>
+      <p:message id="emailMsg" for="email"/>
+      
+      <p:outputLabel value="Fecha Nacimiento: " style="margin:5px 25px"/>
+      <p:datePicker id="fn" value="#{clienteController.cliente.fechaNacimiento}" required="true" label="Fecha de Nacimiento"/>
+      <p:message id="fnMsg" for="fn"/>
+      
+      <p:outputLabel value="Tipo de Usuario: " style="margin:5px 25px"/>
+      <p:selectOneListbox id="tipo" value="#{clienteController.esTransportista}" required="true">
+            <f:selectItem itemLabel="Transportista" itemValue="true" />
+            <f:selectItem itemLabel="Cliente" itemValue="false" />
+        </p:selectOneListbox>
+        
+      <div style="margin:30px"></div>
+      <p:outputLabel value=""/>
+      <p:commandButton action="#{clienteController.registrar}" style="margin:20px 20px" value="Registrar" update="registroForm"/>
+      <p:outputLabel value=""/>
+      
+    </h:panelGrid>
+    </p:panel>
+  </h:form>
+
+  </h:body>
+</html>

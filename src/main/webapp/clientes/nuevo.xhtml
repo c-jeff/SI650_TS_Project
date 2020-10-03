@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      	xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content = "text/html; charset=utf-8" />
+	<title>TropSmart - Clientes</title>
+</h:head>
+<h:body>
+
+<h:form>
+<p:tabMenu activeIndex="#{param.i}">
+    <p:menuitem value="Inicio" url="http://localhost:8087/tropsmart/" icon="pi pi-home">
+        <f:param name="i" value="0" />
+    </p:menuitem>
+    <p:menuitem value="Lista" url="http://localhost:8087/tropsmart/clientes/index.xhtml" icon="pi pi-list">
+        <f:param name="i" value="1" />
+    </p:menuitem>
+    <p:menuitem value="Administrar" url="http://localhost:8087/tropsmart/clientes/nuevo.xhtml" icon="pi pi-cog">
+        <f:param name="i" value="2" />
+    </p:menuitem>
+</p:tabMenu>
+</h:form>
+
+    <h2>Administrar Clientes</h2>
+    
+    <h:form id="form-cliente">
+    	<p:growl id="growl" life="2000" />
+    
+		<p:panelGrid id="panel-cliente" columns="4" style="display:#{clienteView.stylePanelGrid}">
+			<p:outputLabel for="input-apellidos" value="Apellidos: "/>
+			<p:inputText id="input-apellidos" value="#{clienteView.cliente.apellidos}"/>
+			
+			<p:outputLabel for="input-nombres" value="Nombres:  "/>
+			<p:inputText id="input-nombres" value="#{clienteView.cliente.nombres}"/>	
+					
+			<p:outputLabel for="select-distrito" value="Distrito:  "/>			
+			<p:selectOneMenu id="select-distrito" value="#{clienteView.cliente.distritoId}">
+	            <f:selectItem itemLabel="Seleciona un Distrito" itemValue="0" />
+	            <f:selectItems value="#{clienteView.distritos}" var="distrito" 
+	            	itemLabel="#{distrito.nombre}" itemValue="#{distrito.id}" />
+	        </p:selectOneMenu>				
+			
+			<p:outputLabel for="input-numeroDocumento" value="Nro. Documento:  "/>
+			<p:inputNumber id="input-numeroDocumento" value="#{clienteView.cliente.numeroDocumento}"												 maxValue="999999999999" thousandSeparator="" decimalPlaces="0"></p:inputNumber>
+			
+			<p:outputLabel for="input-celular" value="Celular:  "/>
+			<p:inputNumber id="input-celular" value="#{clienteView.cliente.celular}" 																maxValue="9999999999999999999" thousandSeparator="" decimalPlaces="0"></p:inputNumber>
+			
+			<p:outputLabel for="input-correo" value="Correo:  "/>
+			<p:inputText id="input-correo" value="#{clienteView.cliente.correo}"/>
+			
+			<p:outputLabel for="date-fechaNacimiento" value="Fecha de nacimiento:  "/>
+			<p:datePicker id="date-fechaNacimiento" value="#{clienteView.cliente.fechaNacimiento}" />			
+					
+		</p:panelGrid>	
+		
+		<p:panelGrid id="panel-buscar" columns="4" style="display:#{clienteView.styleDataTable}">
+			<p:outputLabel for="input-apellidos-search" value="Apellidos: "/>
+			<p:inputText id="input-apellidos-search" value="#{clienteView.clienteSearch.apellidos}"/>	
+			<p:commandButton value="Buscar" actionListener="#{clienteView.searchApellidosCliente()}" 
+					update=":form-cliente:dt-cliente :form-cliente:toolbar-cliente" 
+					icon="pi pi-search" />
+		</p:panelGrid>	
+		
+	    <p:dataTable id="dt-cliente" value="#{clienteView.clientes}" var="cliente" 
+	    		paginator="true" rows="5" paginatorPosition="bottom" 
+	    		selectionMode="single" rowKey="#{cliente.id}" emptyMessage="No se encontraron registros"
+	    		style="display:#{clienteView.styleDataTable}">
+	    		
+	    	<p:ajax event="rowSelect" listener="#{clienteView.selectCliente}" 
+	    		update=":form-cliente:toolbar-cliente :form-cliente:panel-cliente" />
+	    	<p:ajax event="rowUnselect" listener="#{clienteView.unselectCliente}" 
+	    		update=":form-cliente:toolbar-cliente :form-cliente:panel-cliente" />
+	    		
+		    <p:column headerText="Id">
+		        <h:outputText value="#{cliente.id}" />
+		    </p:column>
+		    
+		    <p:column headerText="Apellidos">
+		        <h:outputText value="#{cliente.apellidos}" />
+		    </p:column>
+		    
+		    <p:column headerText="Nombres">
+		        <h:outputText value="#{cliente.nombres}" />
+		    </p:column>
+		    
+		    <p:column headerText="Distrito">
+		        <h:outputText value="#{cliente.distrito.nombre}" />
+		    </p:column>
+		    
+		    <p:column headerText="Número de documento">
+		        <h:outputText value="#{cliente.numeroDocumento}" />
+		    </p:column>
+		    
+		    <p:column headerText="Celular">
+		        <h:outputText value="#{cliente.celular}" />
+		    </p:column>
+		    
+		    <p:column headerText="Correo">
+		        <h:outputText value="#{cliente.correo}" />
+		    </p:column>
+		    
+		    <p:column headerText="Fecha de nacimiento">
+		        <h:outputText value="#{cliente.fechaNacimiento}" />
+		    </p:column>
+		    
+		</p:dataTable>
+		
+		<p:toolbar id="toolbar-cliente">
+			<f:facet name="left">
+				<p:commandButton value="Nuevo" actionListener="#{clienteView.newCliente()}" 
+					update=":form-cliente :form-cliente:dt-cliente :form-cliente:toolbar-cliente" 
+					icon="pi pi-file" disabled="#{clienteView.disabledNuevo}" />
+					
+				<p:commandButton id="button-grabar" value="Grabar" actionListener="#{clienteView.saveCliente()}" 
+					update=":form-cliente :form-cliente:dt-cliente :form-cliente:toolbar-cliente" 
+					icon="pi pi-save"
+					disabled="#{clienteView.disabledGrabar}" />	
+					
+				<p:commandButton id="button-cancelar" value="Cancelar" actionListener="#{clienteView.cancelSaveCliente()}" 
+					update=":form-cliente :form-cliente:dt-cliente :form-cliente:toolbar-cliente" 
+					icon="pi pi-times"
+					disabled="#{clienteView.disabledCancelar}" />	
+					
+				<p:commandButton value="Editar" actionListener="#{clienteView.editCliente()}" 
+					update=":form-cliente :form-cliente:dt-cliente :form-cliente:toolbar-cliente" 
+					disabled="#{clienteView.disabledEditar}" />
+					
+				<p:commandButton id="button-eliminar" value="Eliminar" 
+					actionListener="#{clienteView.deleteCliente()}" 
+					update=":form-cliente :form-cliente:dt-cliente :form-cliente:toolbar-cliente" 
+					disabled="#{clienteView.disabledEliminar}" >
+					<p:confirm header="Confirmacion" 
+						message="Estas seguro que deseas eliminar a: #{clienteView.clienteSelected.apellidos} + #{clienteView.clienteSelected.nombres}" 
+						icon="pi pi-exclamation-triangle" />
+			    </p:commandButton>
+			     
+			    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+			        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+			    </p:confirmDialog>
+				
+	
+			</f:facet>
+		</p:toolbar>
+	
+	</h:form>
+
+</h:body>
+</html>

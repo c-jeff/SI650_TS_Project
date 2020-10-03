@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      	xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content = "text/html; charset=utf-8" />
+	<title>TropSmart - Servicios</title>
+</h:head>
+<h:body>
+
+<h:form>
+<p:tabMenu activeIndex="#{param.i}">
+    <p:menuitem value="Inicio" url="http://localhost:8087/tropsmart/" icon="pi pi-home">
+        <f:param name="i" value="0" />
+    </p:menuitem>
+    <p:menuitem value="Lista" url="http://localhost:8087/tropsmart/servicios/index.xhtml" icon="pi pi-list">
+        <f:param name="i" value="1" />
+    </p:menuitem>
+    <p:menuitem value="Administrar" url="http://localhost:8087/tropsmart/servicios/nuevo.xhtml" icon="pi pi-cog">
+        <f:param name="i" value="2" />
+    </p:menuitem>
+</p:tabMenu>
+</h:form>
+
+    <h2>Administrar Servicios</h2>
+    
+    <h:form id="form-servicio">
+    	<p:growl id="growl" life="2000" />
+    
+		<p:panelGrid id="panel-servicio" columns="4" style="display:#{servicioView.stylePanelGrid}">
+		
+			<p:outputLabel for="select-cliente" value="Cliente:  "/>
+			<p:selectOneMenu id="select-cliente" value="#{servicioView.servicio.clienteId}">
+	            <f:selectItem itemLabel="Cliente" itemValue="0" />
+	            <f:selectItems value="#{servicioView.clientes}" var="cliente"
+	            	itemLabel="#{cliente.nombres}" itemValue="#{cliente.id}" />
+	        </p:selectOneMenu>
+		
+			<p:outputLabel for="select-transportista" value="Transportista:  "/>
+			<p:selectOneMenu id="select-transportista" value="#{servicioView.servicio.transportistaId}">
+	            <f:selectItem itemLabel="Transportista" itemValue="0" />
+	            <f:selectItems value="#{servicioView.transportistas}" var="transportista" 
+	            	itemLabel="#{transportista.nombres}" itemValue="#{transportista.id}" />
+	        </p:selectOneMenu>
+			
+			<p:outputLabel for="input-precio" value="Precio Solicitado (S/.) :  " required="true"/>
+			<p:inputNumber id="input-precio" value="#{servicioView.servicio.precioSolicitado}" 														decimalSeparator="." thousandSeparator="" maxValue="999" decimalPlaces="2"></p:inputNumber>
+					
+		</p:panelGrid>	
+		
+		<p:panelGrid id="panel-buscar" columns="4" style="display:#{servicioView.styleDataTable}">
+			<p:outputLabel for="input-estado-search" value="Estado: "/>
+			<p:inputText id="input-estado-search" value="#{servicioView.servicioSearch.estado}"/>
+			<p:commandButton value="Buscar" actionListener="#{servicioView.searchEstadoServicio()}"
+					update=":form-servicio:dt-servicio :form-servicio:toolbar-servicio"
+					icon="pi pi-search" />
+		</p:panelGrid>
+		
+	    <p:dataTable id="dt-servicio" value="#{servicioView.servicios}" var="servicio" 
+	    		paginator="true" rows="5" paginatorPosition="bottom" 
+	    		selectionMode="single" rowKey="#{servicio.id}" emptyMessage="No se encontraron registros"
+	    		style="display:#{servicioView.styleDataTable}">
+	    		
+	    	<p:ajax event="rowSelect" listener="#{servicioView.selectServicio}" 
+	    		update=":form-servicio:toolbar-servicio :form-servicio:panel-servicio" />
+	    	<p:ajax event="rowUnselect" listener="#{servicioView.unselectServicio}" 
+	    		update=":form-servicio:toolbar-servicio :form-servicio:panel-servicio" />
+	    		
+		    <p:column headerText="Id">
+		        <h:outputText value="#{servicio.id}" />
+		    </p:column>
+		    
+		    <p:column headerText="Id Cliente">
+		        <h:outputText value="#{servicio.clienteId}" />
+		    </p:column>
+		    
+		    <p:column headerText="Id Transportista">
+		        <h:outputText value="#{servicio.transportistaId}" />
+		    </p:column>
+		    
+		    <p:column headerText="Estado">
+		        <h:outputText value="#{servicio.estado}" />
+		    </p:column>
+		    
+		    <p:column headerText="Precio Solicitado">
+		        <h:outputText value="#{servicio.precioSolicitado}" />
+		    </p:column>
+		    
+		</p:dataTable>
+		
+		<p:toolbar id="toolbar-servicio">
+			<f:facet name="left">
+				<p:commandButton value="Nuevo" actionListener="#{servicioView.newServicio()}" 
+					update=":form-servicio :form-servicio:dt-servicio :form-servicio:toolbar-servicio"
+					icon="pi pi-file" disabled="#{servicioView.disabledNuevo}" />
+					
+				<p:commandButton id="button-grabar" value="Grabar" actionListener="#{servicioView.saveServicio()}" 
+					update=":form-servicio :form-servicio:dt-servicio :form-servicio:toolbar-servicio" 
+					icon="pi pi-save"
+					disabled="#{servicioView.disabledGrabar}" />	
+					
+				<p:commandButton id="button-cancelar" value="Cancelar" actionListener="#{servicioView.cancelSaveServicio()}" 
+					update=":form-servicio :form-servicio:dt-servicio :form-servicio:toolbar-servicio" 
+					icon="pi pi-times"
+					disabled="#{servicioView.disabledCancelar}" />	
+					
+				<p:commandButton value="Editar" actionListener="#{servicioView.editServicio()}" 
+					update=":form-servicio :form-servicio:dt-servicio :form-servicio:toolbar-servicio"
+					disabled="#{servicioView.disabledEditar}" />
+					
+				<p:commandButton id="button-eliminar" value="Eliminar" 
+					actionListener="#{servicioView.deleteServicio()}" 
+					update=":form-servicio :form-servicio:dt-servicio :form-servicio:toolbar-servicio"
+					disabled="#{servicioView.disabledEliminar}" >
+					<p:confirm header="Confirmacion" 
+						message="Estas seguro que deseas eliminar el servicio para el cliente #{servicioView.servicioSelected.clienteId}" 
+						icon="pi pi-exclamation-triangle" />
+			    </p:commandButton>
+			     
+			    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+			        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+			    </p:confirmDialog>
+			</f:facet>
+		</p:toolbar>
+	
+	</h:form>
+
+</h:body>
+</html>

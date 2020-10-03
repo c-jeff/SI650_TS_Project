@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      	xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content = "text/html; charset=utf-8" />
+	<title>TropSmart - Servicios</title>
+</h:head>
+<h:body>
+
+<h:form>
+<p:tabMenu activeIndex="#{param.i}">
+    <p:menuitem value="Inicio" url="http://localhost:8087/tropsmart/" icon="pi pi-home">
+        <f:param name="i" value="0" />
+    </p:menuitem>
+    <p:menuitem value="Lista" url="http://localhost:8087/tropsmart/servicios/index.xhtml" icon="pi pi-list">
+        <f:param name="i" value="1" />
+    </p:menuitem>
+    <p:menuitem value="Administrar" url="http://localhost:8087/tropsmart/servicios/nuevo.xhtml" icon="pi pi-cog">
+        <f:param name="i" value="2" />
+    </p:menuitem>
+</p:tabMenu>
+</h:form>
+
+    <h2>Lista de Servicios</h2>
+    
+    <p:dataTable var="servicio" value="#{servicioView.servicios}">
+    <p:column headerText="Id">
+        <h:outputText value="#{servicio.id}" />
+    </p:column>
+ 
+    <p:column headerText="Id Cliente">
+        <h:outputText value="#{servicio.clienteId}" />
+    </p:column>
+ 
+    <p:column headerText="Id Transportista">
+        <h:outputText value="#{servicio.transportistaId}" />
+    </p:column>
+ 
+    <p:column headerText="Estado">
+        <h:outputText value="#{servicio.estado}" />
+    </p:column>
+    
+    <p:column headerText="Precio Solicitado">
+        <h:outputText value="#{servicio.precioSolicitado}" />
+    </p:column>
+    
+	</p:dataTable>
+
+</h:body>
+</html>

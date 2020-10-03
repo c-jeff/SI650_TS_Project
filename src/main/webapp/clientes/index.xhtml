@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      	xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content = "text/html; charset=utf-8" />
+	<title>TropSmart - Clientes</title>
+</h:head>
+<h:body>
+
+<h:form>
+<p:tabMenu activeIndex="#{param.i}">
+    <p:menuitem value="Inicio" url="http://localhost:8087/tropsmart/" icon="pi pi-home">
+        <f:param name="i" value="0" />
+    </p:menuitem>
+    <p:menuitem value="Lista" url="http://localhost:8087/tropsmart/clientes/index.xhtml" icon="pi pi-list">
+        <f:param name="i" value="1" />
+    </p:menuitem>
+    <p:menuitem value="Administrar" url="http://localhost:8087/tropsmart/clientes/nuevo.xhtml" icon="pi pi-cog">
+        <f:param name="i" value="2" />
+    </p:menuitem>
+</p:tabMenu>
+</h:form>
+
+    <h2>Lista de Clientes</h2>
+    
+    <p:dataTable var="cliente" value="#{clienteView.clientes}">
+    <p:column headerText="Id">
+        <h:outputText value="#{cliente.id}" />
+    </p:column>
+ 
+    <p:column headerText="Nombres">
+        <h:outputText value="#{cliente.nombres}" />
+    </p:column>
+ 
+    <p:column headerText="Apellidos">
+        <h:outputText value="#{cliente.apellidos}" />
+    </p:column>
+ 
+    <p:column headerText="Número Documento">
+        <h:outputText value="#{cliente.numeroDocumento}" />
+    </p:column>
+    
+    <p:column headerText="Distrito">
+        <h:outputText value="#{cliente.distrito.nombre}" />
+    </p:column>
+    
+    <p:column headerText="Celular">
+        <h:outputText value="#{cliente.celular}" />
+    </p:column>
+    
+    <p:column headerText="Correo">
+        <h:outputText value="#{cliente.correo}" />
+    </p:column>
+    
+    <p:column headerText="Fecha Nacimiento">
+        <h:outputText value="#{cliente.fechaNacimiento}" />
+    </p:column>
+    
+    <p:column headerText="Fecha Registro">
+        <h:outputText value="#{cliente.fechaRegistro}" />
+    </p:column>
+	</p:dataTable>
+
+</h:body>
+</html>

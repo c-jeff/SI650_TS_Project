@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      	xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+    	xmlns:p="http://primefaces.org/ui">
+    	
+    	
+<h:head>
+	<title>TropSmart - Inicio</title>
+</h:head>
+
+
+<h:body>
+<h:form>
+<p:tabMenu activeIndex="#{param.i}">
+    <p:menuitem value="Inicio" url="http://localhost:8087/tropsmart/" icon="pi pi-home">
+        <f:param name="i" value="0" />
+    </p:menuitem>
+    <p:menuitem value="Clientes" url="http://localhost:8087/tropsmart/clientes/index.xhtml" icon="pi pi-users">
+        <f:param name="i" value="1" />
+    </p:menuitem>
+    <p:menuitem value="Servicios" url="http://localhost:8087/tropsmart/servicios/index.xhtml" icon="pi pi-inbox">
+        <f:param name="i" value="1" />
+    </p:menuitem>
+</p:tabMenu>
+</h:form>
+
+</h:body>
+</html>
